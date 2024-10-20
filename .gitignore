@@ -26,4 +26,5 @@ go.work.sum
 
 framezzz-api/cmd/server/main
 framezzz-api/logs
+framezzz-api/server
 .idea
