@@ -1,0 +1,28 @@
+name: Go Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go environment
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'  # Same version as in your Dockerfile
+
+      - name: Go into framezzz-api directory
+        working-directory: ./framezzz-api
+        run: |
+          go mod download
+          go build -o ./server ./cmd/server/main.go
