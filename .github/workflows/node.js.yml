@@ -28,3 +28,6 @@ jobs:
     - name: Build Angular app
       working-directory: ./framezzz-frontend
       run: npm run build
+    - name: Test Angular app
+      working-directory: ./framezzz-frontend
+      run: npm test
