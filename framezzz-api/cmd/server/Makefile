@@ -20,3 +20,7 @@ swag: vet
 build: swag
 		go build main.go
 .PHONY:build
+
+test: build
+	   go test ./...
+.PHONY:test
