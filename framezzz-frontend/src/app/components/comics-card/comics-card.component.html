@@ -14,8 +14,20 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>DISLIKE</button>
+      <button mat-icon-button aria-label="Back icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <div>
+        <span>0</span>
+      </div>
     </mat-card-actions>
   </mat-card>
+  <div class="cards-navigation">
+    <button mat-icon-button aria-label="Back icon">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Forward icon">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
 </div>
