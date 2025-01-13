@@ -1,3 +1,17 @@
-<app-toolbar />
-<app-comics-card [image]="'https://material.angular.io/assets/img/examples/shiba2.jpg'" 
-[title]="'Tytuł'" [likesCount]="2137"/>
+<div class="main-container">
+  <app-toolbar class="toolbar"/>
+  <div class="main-content">
+    @if (comic$ | async; as currentComic) {
+      <app-comics-card [image]="currentComic.img" 
+      [title]="currentComic.title" [likesCount]="2137"/>
+      <div class="cards-navigation">
+        <button (click)="previousCard()" mat-icon-button aria-label="Back icon">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button (click)="nextCard()" mat-icon-button aria-label="Forward icon">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</div>

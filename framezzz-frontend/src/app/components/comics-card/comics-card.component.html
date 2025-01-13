@@ -1,9 +1,9 @@
 <div class="main-container">
-  <mat-card class="comics-card" appearance="outlined">
+  <mat-card class="comics-card">
     <mat-card-header>
       <mat-card-title>{{ title }}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image src="{{ image }}" alt="Photo of a Shiba Inu">
+    <img mat-card-image src="{{ image }}" alt="Comic image" width="600" height="400">
     <mat-card-actions>
       <button mat-icon-button aria-label="Back icon">
         <mat-icon>favorite</mat-icon>
@@ -13,12 +13,4 @@
       </div>
     </mat-card-actions>
   </mat-card>
-  <div class="cards-navigation">
-    <button mat-icon-button aria-label="Back icon">
-      <mat-icon>chevron_left</mat-icon>
-    </button>
-    <button mat-icon-button aria-label="Forward icon">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-  </div>
 </div>
