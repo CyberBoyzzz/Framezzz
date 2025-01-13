@@ -1,23 +1,22 @@
 .main-container
   display: flex
   flex-direction: column
-  gap: 16px
   align-items: center
-  height: 555px
+  justify-content: center
+  width: 100%
 
-.mat-mdc-card-header 
-  height: 56px
-
-.mat-mdc-card-title
-  font-size: 20px
-
-.likes-count
+.main-container-likes-count
   font-size: 19px
 
-.comics-card
+.main-container-comics-card
   display: flex
   justify-content: center
   background: #303030
+
+.main-container-img
+  width: 100%
+  max-width: 600px
+  height: 400px
 
 .mat-icon
   color: red
@@ -32,9 +31,8 @@
   &:hover
     background: #303030
 
-img
-  width: 100%
-  height: auto
-  max-width: 600px
-  max-height: 400px
-  object-fit: contain
+.mat-mdc-card-header 
+  height: 56px
+
+.mat-mdc-card-title
+  font-size: 20px
