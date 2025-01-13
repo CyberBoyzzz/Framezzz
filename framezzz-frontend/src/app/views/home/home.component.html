@@ -3,7 +3,7 @@
   <div class="main-content">
     @if (comic$ | async; as currentComic) {
       <app-comics-card [image]="currentComic.img" 
-      [title]="currentComic.title" [likesCount]="2137"/>
+      [title]="currentComic.title" [likesCount]="0"/>
       <div class="cards-navigation">
         <button (click)="previousCard()" mat-icon-button aria-label="Back icon">
           <mat-icon>chevron_left</mat-icon>
