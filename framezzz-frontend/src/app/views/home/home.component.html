@@ -1,0 +1,17 @@
+<div class="main-container">
+  <app-toolbar class="main-container-toolbar"/>
+  <div class="main-container-content">
+    @if (comic$ | async; as currentComic) {
+      <app-comics-card [image]="currentComic.img" 
+      [title]="currentComic.title" [likesCount]="0"/>
+    }
+  </div>
+  <div class="main-container-cards-navigation">
+    <button (click)="previousCard()" mat-icon-button aria-label="Back icon">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button (click)="nextCard()" mat-icon-button aria-label="Forward icon">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</div>
