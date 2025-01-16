@@ -10,9 +10,15 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [ComicsCardComponent, ToolbarComponent, MatIconModule, MatButtonModule, AsyncPipe],
+  imports: [
+    ComicsCardComponent,
+    ToolbarComponent,
+    MatIconModule,
+    MatButtonModule,
+    AsyncPipe,
+  ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.sass'
+  styleUrl: './home.component.sass',
 })
 export class HomeComponent {
   private readonly comicsService = inject(ComicsService);
@@ -27,7 +33,7 @@ export class HomeComponent {
 
   protected previousCard() {
     if (this.currentComicId > 1) {
-      this.comic$ = this.comicsService.getComic(this.currentComicId - 1)
+      this.comic$ = this.comicsService.getComic(this.currentComicId - 1);
       this.currentComicId -= 1;
     }
   }

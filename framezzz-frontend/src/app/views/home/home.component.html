@@ -1,9 +1,12 @@
 <div class="main-container">
-  <app-toolbar class="main-container-toolbar"/>
+  <app-toolbar class="main-container-toolbar" />
   <div class="main-container-content">
     @if (comic$ | async; as currentComic) {
-      <app-comics-card [image]="currentComic.img" 
-      [title]="currentComic.title" [likesCount]="0"/>
+    <app-comics-card
+      [image]="currentComic.img"
+      [title]="currentComic.title"
+      [likesCount]="0"
+    />
     }
   </div>
   <div class="main-container-cards-navigation">
