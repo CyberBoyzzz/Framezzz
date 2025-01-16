@@ -11,9 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComicsCardComponent {
-  @Input() image: string = '';
+  @Input() protected image: string = '';
 
-  @Input() title: string = '';
+  @Input() protected title: string = '';
 
-  @Input() likesCount: number = 0;
+  @Input() protected likesCount: number = 0;
 }
