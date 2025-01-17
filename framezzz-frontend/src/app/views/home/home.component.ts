@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ComicsService } from '../../services/comics/comics.service';
 import { Observable, Subscription } from 'rxjs';
 import { Comic } from '../../interfaces/comic.interface';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,6 @@ import { AsyncPipe } from '@angular/common';
     ToolbarComponent,
     MatIconModule,
     MatButtonModule,
-    AsyncPipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.sass',
