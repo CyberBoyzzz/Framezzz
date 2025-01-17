@@ -34,4 +34,8 @@ export class ToolbarComponent {
 
     this.router.navigate(['login']);
   }
+
+  protected isLoggedIn() {
+    return this.cookieService.check('authToken');
+  }
 }
