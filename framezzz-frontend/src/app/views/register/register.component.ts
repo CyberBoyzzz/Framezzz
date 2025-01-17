@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { UserData } from '../../interfaces/user-data.interface';
 import { CustomToastrService } from '../../services/custom-toastr/custom-toastr.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -32,6 +33,8 @@ export class RegisterComponent {
   private authService = inject(AuthService);
 
   private customToastrService = inject(CustomToastrService);
+
+  private subscription: Subscription | undefined;
 
   protected registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -64,7 +67,7 @@ export class RegisterComponent {
 
     const user: UserData = { email: email!, password: password! };
 
-    this.authService.registerUser(user).subscribe({
+    this.subscription = this.authService.registerUser(user).subscribe({
       next: () => {
         this.registerForm.reset();
 
@@ -78,5 +81,9 @@ export class RegisterComponent {
         this.customToastrService.error('Failed to register user.');
       },
     });
+  }
+
+  public ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 }

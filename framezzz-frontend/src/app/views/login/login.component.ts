@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { UserData } from '../../interfaces/user-data.interface';
 import { LoginResponse } from '../../interfaces/login-response.interface';
 import { CustomToastrService } from '../../services/custom-toastr/custom-toastr.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,8 @@ export class LoginComponent {
 
   private customToastrService = inject(CustomToastrService);
 
+  private subscription: Subscription | undefined;
+
   protected loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -52,7 +55,7 @@ export class LoginComponent {
 
     const user: UserData = { email: email!, password: password! };
 
-    this.authService.loginUser(user).subscribe({
+    this.subscription = this.authService.loginUser(user).subscribe({
       next: (response: LoginResponse) => {
         this.cookieService.set('authToken', response.token, 7);
 
@@ -64,5 +67,9 @@ export class LoginComponent {
         this.customToastrService.error('Failed to login user.');
       },
     });
+  }
+
+  public ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 }
