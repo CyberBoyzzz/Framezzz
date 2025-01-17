@@ -1,7 +1,16 @@
 {
-  "/api": {
+  "/xkcd": {
     "target": "https://xkcd.com",
     "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/xkcd": ""
+    }
+  },
+  "/api": {
+    "target": "http://localhost:7312",
+    "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {

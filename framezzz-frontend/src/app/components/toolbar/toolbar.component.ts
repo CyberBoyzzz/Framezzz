@@ -9,20 +9,20 @@ import { Router } from '@angular/router';
   selector: 'app-toolbar',
   imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './toolbar.component.html',
-  styleUrl: './toolbar.component.sass'
+  styleUrl: './toolbar.component.sass',
 })
 export class ToolbarComponent {
   private readonly router = inject(Router);
-  
+
   protected openLoginPage() {
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
   }
 
   protected openRegisterPage() {
-    this.router.navigate(['register'])
+    this.router.navigate(['register']);
   }
 
   protected openHomePage() {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 }
