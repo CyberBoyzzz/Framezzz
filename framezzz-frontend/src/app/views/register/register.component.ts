@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { UserData } from '../../interfaces/user-data.interface';
+import { CustomToastrService } from '../../services/custom-toastr/custom-toastr.service';
 
 @Component({
   selector: 'app-register',
@@ -30,9 +31,13 @@ export class RegisterComponent {
 
   private authService = inject(AuthService);
 
+  private customToastrService = inject(CustomToastrService);
+
   protected registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
+
     password: new FormControl('', [Validators.required]),
+
     repeatPassword: new FormControl('', [Validators.required]),
   });
 
@@ -40,11 +45,14 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return;
 
     const email = this.registerForm.get('email')?.value;
+
     const password = this.registerForm.get('password')?.value;
+
     const repeatPassword = this.registerForm.get('repeatPassword')?.value;
 
     if (password !== repeatPassword) {
-      alert('Passwords do not match');
+      this.customToastrService.error('Passwords do not match');
+
       return;
     }
 
@@ -53,10 +61,11 @@ export class RegisterComponent {
     this.authService.registerUser(user).subscribe({
       next: () => {
         this.registerForm.reset();
+
         this.router.navigate(['login']);
       },
       error: () => {
-        alert('Failed to register user.');
+        this.customToastrService.error('Failed to register user.');
       },
     });
   }

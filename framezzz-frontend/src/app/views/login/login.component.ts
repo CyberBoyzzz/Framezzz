@@ -14,6 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { UserData } from '../../interfaces/user-data.interface';
 import { LoginResponse } from '../../interfaces/login-response.interface';
+import { CustomToastrService } from '../../services/custom-toastr/custom-toastr.service';
 
 @Component({
   selector: 'app-login',
@@ -34,8 +35,11 @@ export class LoginComponent {
 
   private readonly authService = inject(AuthService);
 
+  private customToastrService = inject(CustomToastrService);
+
   protected loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
+
     password: new FormControl('', [Validators.required]),
   });
 
@@ -43,6 +47,7 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     const email = this.loginForm.get('email')?.value;
+
     const password = this.loginForm.get('password')?.value;
 
     const user: UserData = { email: email!, password: password! };
@@ -50,10 +55,11 @@ export class LoginComponent {
     this.authService.loginUser(user).subscribe({
       next: (response: LoginResponse) => {
         this.cookieService.set('authToken', response.token, 7);
+
         this.router.navigate(['']);
       },
       error: () => {
-        alert('Failed to login user.');
+        this.customToastrService.error('Failed to login user.');
       },
     });
   }
