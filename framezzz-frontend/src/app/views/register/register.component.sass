@@ -1,15 +1,17 @@
+@use '../../../colors' as colors
+  
 .main-container
   height: 100vh
   width: 100vw
   display: flex
   flex-direction: column
   justify-content: start
-  background: #212121
+  background: colors.$bg-color
   gap: 5vh
 
 .main-container-toolbar
   height: 15%
-  margin-bottom: 15vh
+  margin-bottom: 14vh
 
 .main-container-form
   display: flex
@@ -26,4 +28,4 @@
     margin-top: 4px
 
 .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input
-  color: #FFFFFF !important
+  color: colors.$font-color !important
