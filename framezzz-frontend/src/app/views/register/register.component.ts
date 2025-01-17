@@ -62,6 +62,10 @@ export class RegisterComponent {
       next: () => {
         this.registerForm.reset();
 
+        this.customToastrService.success(
+          'Registration successful! You can now log in.'
+        );
+
         this.router.navigate(['login']);
       },
       error: () => {

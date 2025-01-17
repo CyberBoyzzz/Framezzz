@@ -56,6 +56,8 @@ export class LoginComponent {
       next: (response: LoginResponse) => {
         this.cookieService.set('authToken', response.token, 7);
 
+        this.customToastrService.success('Login successful!');
+
         this.router.navigate(['']);
       },
       error: () => {
