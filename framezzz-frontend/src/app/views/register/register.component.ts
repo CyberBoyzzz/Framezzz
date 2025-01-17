@@ -47,7 +47,7 @@ export class RegisterComponent {
     ]),
   });
 
-  protected submit() {
+  protected submit(): void {
     if (this.registerForm.invalid) return;
 
     const email = this.registerForm.get('email')?.value;

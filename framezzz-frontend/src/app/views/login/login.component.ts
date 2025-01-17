@@ -43,7 +43,7 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  protected submit() {
+  protected submit(): void {
     if (this.loginForm.invalid) return;
 
     const email = this.loginForm.get('email')?.value;
