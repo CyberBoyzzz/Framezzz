@@ -47,15 +47,14 @@ export class LoginComponent {
 
     const user: UserData = { email: email!, password: password! };
 
-    this.authService.loginUser(user).subscribe(
-      (response: LoginResponse) => {
+    this.authService.loginUser(user).subscribe({
+      next: (response: LoginResponse) => {
         this.cookieService.set('authToken', response.token, 7);
-
         this.router.navigate(['']);
       },
-      () => {
+      error: () => {
         alert('Failed to login user.');
-      }
-    );
+      },
+    });
   }
 }

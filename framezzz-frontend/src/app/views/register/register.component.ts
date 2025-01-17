@@ -50,15 +50,14 @@ export class RegisterComponent {
 
     const user: UserData = { email: email!, password: password! };
 
-    this.authService.registerUser(user).subscribe(
-      () => {
+    this.authService.registerUser(user).subscribe({
+      next: () => {
         this.registerForm.reset();
-
         this.router.navigate(['login']);
       },
-      () => {
+      error: () => {
         alert('Failed to register user.');
-      }
-    );
+      },
+    });
   }
 }
