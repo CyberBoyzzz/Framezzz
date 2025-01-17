@@ -8,8 +8,7 @@
       mat-card-image
       src="{{ comic.img }}"
       alt="Comic image"
-      width="600"
-      height="400"
+      (click)="openImageDialog(comic.img)"
     />
     <mat-card-actions>
       <button mat-icon-button aria-label="favorite">
