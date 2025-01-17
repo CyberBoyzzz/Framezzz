@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { UserData } from '../../interfaces/user-data.interface';
+import { LoginResponse } from '../../interfaces/login-response.interface';
 
 @Component({
   selector: 'app-login',
@@ -43,8 +45,10 @@ export class LoginComponent {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
 
-    this.authService.loginUser(email!, password!).subscribe(
-      (response) => {
+    const user: UserData = { email: email!, password: password! };
+
+    this.authService.loginUser(user).subscribe(
+      (response: LoginResponse) => {
         this.cookieService.set('authToken', response.token, 7);
 
         this.router.navigate(['']);

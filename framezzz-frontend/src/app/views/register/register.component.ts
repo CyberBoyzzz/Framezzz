@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { UserData } from '../../interfaces/user-data.interface';
 
 @Component({
   selector: 'app-register',
@@ -47,7 +48,9 @@ export class RegisterComponent {
       return;
     }
 
-    this.authService.registerUser(email!, password!).subscribe(
+    const user: UserData = { email: email!, password: password! };
+
+    this.authService.registerUser(user).subscribe(
       () => {
         this.registerForm.reset();
 
