@@ -36,9 +36,15 @@ export class RegisterComponent {
   protected registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
 
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
 
-    repeatPassword: new FormControl('', [Validators.required]),
+    repeatPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
   });
 
   protected submit() {

@@ -15,7 +15,9 @@
       <mat-label>Password</mat-label>
       <input type="password" matInput formControlName="password" />
       @if (registerForm.get('password')?.hasError('required')) {
-      <mat-error mat-error>Password is required</mat-error>
+      <mat-error mat-error
+        >Password is required. Minimum 8 characters.</mat-error
+      >
       }
     </mat-form-field>
     <mat-form-field class="main-container-form-field" appearance="outline">
