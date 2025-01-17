@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class ToolbarComponent {
   private readonly router = inject(Router);
+
+  private readonly cookieService = inject(CookieService);
 
   protected openLoginPage() {
     this.router.navigate(['login']);
@@ -24,5 +27,11 @@ export class ToolbarComponent {
 
   protected openHomePage() {
     this.router.navigate(['']);
+  }
+
+  protected signOut() {
+    this.cookieService.delete('authToken', '/');
+
+    this.router.navigate(['login']);
   }
 }
