@@ -10,22 +10,10 @@ import (
 	"github.com/CyberBoyzzz/Framezzz/internal/model"
 )
 
-func (s *Storage) AddBook(ctx context.Context, book model.AddBookRequest) (int, error) {
-	var id int
-	err := s.db.Get(&id, `INSERT INTO books(title, author, cover_url, post_url, created_at, updated_at)
-			VALUES($1,$2,$3,$4,$5,$6) RETURNING id`, book.Title, book.Author, book.CoverURL, book.PostURL, time.Now().UTC(), time.Now().UTC())
+func (s *Storage) GetComic(ctx context.Context, id int) (model.Comic, error) {
+	var book model.Comic
 
-	if err != nil {
-		return 0, err
-	}
-
-	return id, nil
-}
-
-func (s *Storage) GetBook(ctx context.Context, id int) (model.Book, error) {
-	var book model.Book
-
-	err := s.db.Get(&book, `Select * from books where id=$1`, id)
+	err := s.db.Get(&book, `Select * from comics where id=$1`, id)
 	if err != nil {
 		return book, err
 	}
@@ -33,9 +21,9 @@ func (s *Storage) GetBook(ctx context.Context, id int) (model.Book, error) {
 	return book, nil
 }
 
-func (s *Storage) GetBooks(ctx context.Context) ([]model.Book, error) {
-	var books []model.Book
-	err := s.db.Select(&books, `SELECT * from books`)
+func (s *Storage) GetBooks(ctx context.Context) ([]model.Comic, error) {
+	var books []model.Comic
+	err := s.db.Select(&books, `SELECT * from comics`)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +31,7 @@ func (s *Storage) GetBooks(ctx context.Context) ([]model.Book, error) {
 	return books, nil
 }
 
-func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateBookRequest) (int, error) {
+func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateComicRequest) (int, error) {
 	var columns []string
 	var argCount = 1
 	var args []interface{}
@@ -54,21 +42,9 @@ func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateBookRequest) 
 		argCount++
 	}
 
-	if book.Author != "" {
-		columns = append(columns, fmt.Sprintf("author=$%d", argCount))
-		args = append(args, book.Author)
-		argCount++
-	}
-
 	if book.CoverURL != "" {
 		columns = append(columns, fmt.Sprintf("cover_url=$%d", argCount))
 		args = append(args, book.CoverURL)
-		argCount++
-	}
-
-	if book.PostURL != "" {
-		columns = append(columns, fmt.Sprintf("post_url=$%d", argCount))
-		args = append(args, book.PostURL)
 		argCount++
 	}
 
@@ -82,7 +58,7 @@ func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateBookRequest) 
 
 	args = append(args, book.ID)
 
-	query := fmt.Sprintf(`UPDATE books SET %s WHERE id=$%d RETURNING id`, strings.Join(columns, ", "), argCount)
+	query := fmt.Sprintf(`UPDATE comics SET %s WHERE id=$%d RETURNING id`, strings.Join(columns, ", "), argCount)
 
 	var id int
 	err := s.db.Get(&id, query, args...)
@@ -90,23 +66,4 @@ func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateBookRequest) 
 		return 0, err
 	}
 	return id, nil
-}
-
-func (s *Storage) DeleteBook(ctx context.Context, id int) error {
-	_, err := s.db.Exec(`DELETE FROM books WHERE id=$1`, id)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (s *Storage) VerifyBookExists(ctx context.Context, id int) (bool, error) {
-	var exists bool
-	err := s.db.Get(&exists, `SELECT EXISTS(SELECT 1 from books where id=$1)`, id)
-	if err != nil {
-		return false, err
-	}
-
-	return exists, nil
 }
