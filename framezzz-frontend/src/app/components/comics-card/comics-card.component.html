@@ -1,0 +1,16 @@
+<div class="main-container">
+  <mat-card class="main-container-comics-card">
+    <mat-card-header>
+      <mat-card-title>{{ title }}</mat-card-title>
+    </mat-card-header>
+    <img class="main-container-img" mat-card-image src="{{ image }}" alt="Comic image" width="600" height="400">
+    <mat-card-actions>
+      <button mat-icon-button aria-label="favorite">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <div class="main-container-likes-count">
+        <span>{{ likesCount }}</span>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
