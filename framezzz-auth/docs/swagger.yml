@@ -4,7 +4,7 @@ info:
   description: API documentation for user authentication endpoints
   version: 1.0.0
 paths:
-  /register:
+  /auth/register:
     post:
       summary: Register a new user
       tags:
@@ -59,7 +59,7 @@ paths:
                   error:
                     type: string
                     example: 'User already exists'
-  /login:
+  /auth/login:
     post:
       summary: Log in a user
       tags:
