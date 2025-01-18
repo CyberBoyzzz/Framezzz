@@ -40,16 +40,17 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	}
 
 	// can change DB implementation from here
-	storage, err := storage.NewPostgresDB()
+	newStorage, err := storage.NewPostgresDB()
 	if err != nil {
 		logger.Log.Error(err)
 		panic(err.Error())
 	}
 	// Migrations which will update the DB or create it if it doesn't exist.
-	if err := storage.MigratePostgres("file://migrations"); err != nil {
+	if err := newStorage.MigratePostgres(
+		"file://migrations"); err != nil {
 		logger.Log.Fatal(err)
 	}
-	app.Storage = storage
+	app.Storage = newStorage
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.MethodNotAllowedHandler = http.HandlerFunc(app.NotAllowedHandler)
@@ -72,8 +73,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		IsDevelopment:      app.Env == "DEV",
 		ContentTypeNosniff: true,
 		SSLRedirect:        true,
-		// If the app is behind a proxy
-		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+		SSLProxyHeaders:    map[string]string{"X-Forwarded-Proto": "https"},
 	})
 
 	// Usual Middlewares
@@ -84,7 +84,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	n.Use(negroni.HandlerFunc(middlewares.TrackRequestMiddleware))
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Allows all origins
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedMethods:   []string{"GET", "POST"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
 		MaxAge:           86400,

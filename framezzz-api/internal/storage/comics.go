@@ -21,7 +21,7 @@ func (s *Storage) GetComic(ctx context.Context, id int) (model.Comic, error) {
 	return book, nil
 }
 
-func (s *Storage) GetBooks(ctx context.Context) ([]model.Comic, error) {
+func (s *Storage) GetComics(ctx context.Context) ([]model.Comic, error) {
 	var books []model.Comic
 	err := s.db.Select(&books, `SELECT * from comics`)
 	if err != nil {
@@ -31,7 +31,7 @@ func (s *Storage) GetBooks(ctx context.Context) ([]model.Comic, error) {
 	return books, nil
 }
 
-func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateComicRequest) (int, error) {
+func (s *Storage) UpdateComic(ctx context.Context, book model.UpdateComicRequest) (int, error) {
 	var columns []string
 	var argCount = 1
 	var args []interface{}
@@ -66,4 +66,14 @@ func (s *Storage) UpdateBook(ctx context.Context, book model.UpdateComicRequest)
 		return 0, err
 	}
 	return id, nil
+}
+
+func (s *Storage) VerifyComicExists(ctx context.Context, id int) (bool, error) {
+	var exists bool
+	query := "SELECT EXISTS(SELECT 1 FROM comics WHERE id = $1)"
+	err := s.db.GetContext(ctx, &exists, query, id)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }

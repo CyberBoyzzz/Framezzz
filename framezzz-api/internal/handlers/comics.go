@@ -14,7 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// GetBooks godoc
+// GetComics godoc
 //
 //	@Summary		Get all books
 //	@Tags			Books
@@ -102,7 +102,7 @@ func (h *Handlers) GetComicHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// UpdateBook godoc
+// UpdateComic godoc
 //
 //		@Summary		Update a specific book
 //		@Tags			Books
