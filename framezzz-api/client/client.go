@@ -25,7 +25,7 @@ func exponentialBackoff(attempt int) time.Duration {
 	return time.Duration(backoff) + jitter
 }
 
-func makeAPICall(method, url string) (string, error) {
+func MakeAPICall(method, url string) (string, error) {
 	var responseBody string
 
 	for attempt := 0; attempt <= maxRetries; attempt++ {

@@ -11,8 +11,10 @@ import (
 type StorageInterface interface {
 	GetComic(ctx context.Context, id int) (model.Comic, error)
 	GetComics(ctx context.Context) ([]model.Comic, error)
-	UpdateComic(ctx context.Context, book model.UpdateComicRequest) (int, error)
+	UpdateComic(ctx context.Context, comic model.UpdateComicRequest) (int, error)
 	VerifyComicExists(ctx context.Context, id int) (bool, error)
+	//UserLogin(ctx context.Context, id int) (model.Comic, error)
+	//UserRegister(ctx context.Context, id int) (model.Comic, error)
 }
 
 // Storage contains an SQL db. Storage implements the StorageInterface.

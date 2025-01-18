@@ -18,7 +18,7 @@ func TestMakeAPICall_Success(t *testing.T) {
 	server := setupTestServer(http.StatusOK, "Success")
 	defer server.Close()
 
-	response, err := makeAPICall("GET", server.URL)
+	response, err := MakeAPICall("GET", server.URL)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -31,7 +31,7 @@ func TestMakeAPICall_BadRequest(t *testing.T) {
 	server := setupTestServer(http.StatusBadRequest, "Bad Request")
 	defer server.Close()
 
-	_, err := makeAPICall("GET", server.URL)
+	_, err := MakeAPICall("GET", server.URL)
 	if err == nil {
 		t.Fatal("Expected error, got none")
 	}
@@ -44,7 +44,7 @@ func TestMakeAPICall_NotFound(t *testing.T) {
 	server := setupTestServer(http.StatusNotFound, "Not Found")
 	defer server.Close()
 
-	_, err := makeAPICall("GET", server.URL)
+	_, err := MakeAPICall("GET", server.URL)
 	if err == nil {
 		t.Fatal("Expected error, got none")
 	}
@@ -67,7 +67,7 @@ func TestMakeAPICall_TooManyRequests(t *testing.T) {
 	}))
 	defer server.Close()
 
-	response, err := makeAPICall("GET", server.URL)
+	response, err := MakeAPICall("GET", server.URL)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -93,7 +93,7 @@ func TestMakeAPICall_InternalServerError(t *testing.T) {
 	}))
 	defer server.Close()
 
-	response, err := makeAPICall("GET", server.URL)
+	response, err := MakeAPICall("GET", server.URL)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}

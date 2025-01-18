@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	github.com/go-playground/validator/v10 v10.15.5
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/google/uuid v1.4.0
 	github.com/gorilla/mux v1.8.0
