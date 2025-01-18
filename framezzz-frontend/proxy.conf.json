@@ -8,13 +8,13 @@
       "^/xkcd": ""
     }
   },
-  "/api": {
-    "target": "http://localhost:7312",
+  "/auth-api": {
+    "target": "http://localhost:7313",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {
-      "^/api": ""
+      "^/auth-api": ""
     }
   }
 }
