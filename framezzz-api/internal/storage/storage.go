@@ -9,12 +9,10 @@ import (
 )
 
 type StorageInterface interface {
-	AddBook(ctx context.Context, book model.AddBookRequest) (int, error)
-	GetBook(ctx context.Context, id int) (model.Book, error)
-	GetBooks(ctx context.Context) ([]model.Book, error)
-	UpdateBook(ctx context.Context, book model.UpdateBookRequest) (int, error)
-	DeleteBook(ctx context.Context, id int) error
-	VerifyBookExists(ctx context.Context, id int) (bool, error)
+	GetComic(ctx context.Context, id int) (model.Comic, error)
+	GetComics(ctx context.Context) ([]model.Comic, error)
+	UpdateComic(ctx context.Context, book model.UpdateComicRequest) (int, error)
+	VerifyComicExists(ctx context.Context, id int) (bool, error)
 }
 
 // Storage contains an SQL db. Storage implements the StorageInterface.
