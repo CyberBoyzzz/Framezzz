@@ -1,3 +1,6 @@
+@use './app/components/toolbar/toolbar.component'
+@use './colors' as colors
+@use 'ngx-toastr/toastr'
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap')
 
 *
@@ -5,11 +8,45 @@
   margin: 0
   padding: 0
   font-family: 'Quicksand', sans-serif
-  color: #FFFFFF
+  color: colors.$font-color
+  caret-color: colors.$input-text !important
 
 html
   height: 100vh
   overflow: hidden
+  background: colors.$bg-color !important
 
 body
   height: 100%
+
+
+.toast-new
+  position: relative
+  overflow: hidden
+  margin: 0 0 6px
+  padding: 15px 15px 15px 50px
+  width: 300px
+  border-radius: 8px
+  background-position: 15px center
+  background-repeat: no-repeat
+  background-size: 24px
+  box-shadow: 0 0 0 !important
+  color: colors.$font-color
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input
+  color: colors.$font-color !important
+
+.mdc-notched-outline > *
+  border-color: colors.$containers-color !important
+  background: colors.$containers-color
+
+.mdc-text-field--outlined .mdc-notched-outline
+  z-index: 0 !important
+
+.mat-mdc-outlined-button:not(:disabled)
+  border-radius: 4px
+  background: colors.$containers-color
+  border: 0px
+
+  &:hover
+    background: colors.$containers-color !important

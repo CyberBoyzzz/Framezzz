@@ -6,7 +6,7 @@ COPY ./framezzz-frontend/ ./
 
 RUN npm install -g @angular/cli
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 EXPOSE 4200
 

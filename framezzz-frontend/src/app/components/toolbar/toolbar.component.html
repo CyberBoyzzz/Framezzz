@@ -1,7 +1,14 @@
 <mat-toolbar>
-  <button mat-icon-button aria-label="Menu icon">
+  <button mat-icon-button aria-label="Menu icon" [matMenuTriggerFor]="menu">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>Framezzz</span>
-  <span class="example-spacer"></span>
+  <mat-menu #menu="matMenu">
+    @if (!isLoggedIn()) {
+    <button (click)="openLoginPage()" mat-menu-item>Sign in</button>
+    <button (click)="openRegisterPage()" mat-menu-item>Sign up</button>
+    } @else {
+    <button (click)="signOut()" mat-menu-item>Sign out</button>
+    }
+  </mat-menu>
+  <span (click)="openHomePage()">Framezzz</span>
 </mat-toolbar>

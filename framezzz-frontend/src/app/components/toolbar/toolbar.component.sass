@@ -1,9 +1,29 @@
-.mat-toolbar-single-row
-  background: #212121
+@use '../../../colors' as colors
+  
+mat-toolbar  
+  background: colors.$bg-color !important
 
 .mat-mdc-icon-button
-  color: white
+  color: colors.$font-color !important
   margin-right: 5px
 
   &:hover
-    background: #303030
+    background: colors.$containers-color
+
+.mat-mdc-menu-item, .mat-focus-indicator 
+  &:hover
+    opacity: 0.6
+
+span
+  &:hover
+    cursor: pointer
+
+.mat-mdc-menu-content, .mat-mdc-menu-panel, .mat-mdc-menu-panel .mat-menu-after .mat-menu-below .ng-star-inserted
+  background: colors.$containers-color !important
+  background-color: colors.$containers-color
+
+.mat-mdc-menu-content
+  background: colors.$containers-color
+  background-color: colors.$containers-color
+  box-shadow: none
+  border-radius: 5px
