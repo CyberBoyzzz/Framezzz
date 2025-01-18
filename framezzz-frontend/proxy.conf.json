@@ -9,7 +9,7 @@
     }
   },
   "/auth-api": {
-    "target": "http://localhost:7313",
+    "target": "http://host.docker.internal:7313",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
