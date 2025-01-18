@@ -24,8 +24,6 @@ jobs:
           cache-dependency-path: './framezzz-frontend/package-lock.json'
       - name: Install dependencies
         working-directory: ./framezzz-frontend
-        run: npm i
-      - name: Install additional dependency
         run: npm install --legacy-peer-deps
       - name: Build Angular app
         working-directory: ./framezzz-frontend
