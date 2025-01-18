@@ -14,4 +14,13 @@ func SetupRoutes(router *gin.Engine) {
 		auth.POST("/register", controllers.Register)
 		auth.POST("/login", controllers.Login)
 	}
+
+	// Protected routes
+	protected := router.Group("/protected").Use(middlewares.AuthMiddleware())
+	{
+		protected.GET("/profile", func(c *gin.Context) {
+			userID := c.GetInt("userID")
+			c.JSON(http.StatusOK, gin.H{"message": "Protected content", "userID": userID})
+		})
+	}
 }
