@@ -12,6 +12,7 @@ COPY framezzz-api/cmd/server/docs/ ./cmd/server/docs/
 COPY framezzz-api/pkg/ ./pkg/
 COPY framezzz-api/internal/ ./internal/
 COPY framezzz-api/config/ ./config/
+COPY framezzz-api/client/ ./client/
 
 RUN CGO_ENABLED=0 go build -o ./server ./cmd/server/main.go
 

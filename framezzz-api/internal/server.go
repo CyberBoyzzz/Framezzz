@@ -39,7 +39,6 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		}),
 	}
 
-	// can change DB implementation from here
 	newStorage, err := storage.NewPostgresDB()
 	if err != nil {
 		logger.Log.Error(err)
@@ -57,7 +56,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	router.NotFoundHandler = http.HandlerFunc(app.NotFoundHandler)
 	router.Methods("GET").Path("/api/comic").HandlerFunc(app.GetComicsHandler)
 	router.Methods("GET").Path("/api/comic/{id:[0-9]+}").HandlerFunc(app.GetComicHandler)
-	router.Methods("POST").Path("/api/comic/update").HandlerFunc(app.UpdateComicHandler)
+	router.Methods("POST").Path("/api/comic/update/").HandlerFunc(app.UpdateComicHandler)
 
 	if app.Env != config.PROD_ENV {
 		router.Methods("GET").PathPrefix("/api/docs/").Handler(httpSwagger.Handler(
@@ -73,7 +72,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		IsDevelopment:      app.Env == "DEV",
 		ContentTypeNosniff: true,
 		SSLRedirect:        true,
-		SSLProxyHeaders:    map[string]string{"X-Forwarded-Proto": "https"},
+		//SSLProxyHeaders:    map[string]string{"X-Forwarded-Proto": "https"},
 	})
 
 	// Usual Middlewares
@@ -94,7 +93,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	n.UseHandler(wrappedRouter)
 
 	startupMessage := "Starting API server (v" + app.Version + ")"
-	startupMessage = startupMessage + " on port " + app.Port
+	startupMessage = startupMessage + " on port" + app.Port
 	startupMessage = startupMessage + " in " + app.Env + " mode."
 	logger.Log.Info(startupMessage)
 
@@ -111,7 +110,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		Handler:      n,
 	}
 
-	logger.Log.Info("Listening...")
+	logger.Log.Info("Loading...")
 
 	server.ListenAndServe()
 }

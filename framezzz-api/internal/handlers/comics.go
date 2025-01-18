@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/CyberBoyzzz/Framezzz/client"
 	"net/http"
 	"strconv"
 	"strings"
@@ -16,12 +17,12 @@ import (
 
 // GetComics godoc
 //
-//	@Summary		Get all books
-//	@Tags			Books
+//	@Summary		Get all comics
+//	@Tags			Comics
 //	@Produce		json
-//	@Success		200	{object} []model.GetBookResponse
+//	@Success		200	{object} []model.GetComicResponse
 //
-// @Router			/api/books [get]
+// @Router			/api/comics [get]
 func (h *Handlers) GetComicsHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -45,7 +46,7 @@ func (h *Handlers) GetComicsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.OutputLog.WithFields(logrus.Fields{
 			"err": err.Error(),
-		}).Fatal("Error when requesting /books")
+		}).Fatal("Error when requesting /comics")
 
 		panic(err)
 	}
@@ -53,68 +54,96 @@ func (h *Handlers) GetComicsHandler(w http.ResponseWriter, r *http.Request) {
 
 // GetComic godoc
 //
-//	@Summary		Get a specific book
-//	@Tags			Books
+//	@Summary		Get a specific comic
+//	@Tags			Comics
 //	@Produce		json
-//	@Param			id path int	true "Book ID"
-//	@Success		200	{object} model.GetBookResponse
+//	@Param			id path int	true "Comic ID"
+//	@Success		200	{object} model.GetComicResponse
 //
-// @Router			/api/book/{id} [get]
+// @Router			/api/comic/{id} [get]
 func (h *Handlers) GetComicHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	// Extract variables from the URL
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+	idStr, exists := vars["id"]
+	if !exists {
+		h.Sender.JSON(w, http.StatusBadRequest, "Comic ID is required")
+		return
+	}
+
+	// Convert ID to integer
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		h.Sender.JSON(w, http.StatusInternalServerError, err.Error())
+		h.Sender.JSON(w, http.StatusBadRequest, "Invalid comic ID format")
+		return
+	}
+
+	// Verify if the comic exists in the database
+	comicExists, err := h.Storage.VerifyComicExists(ctx, id)
+	if err != nil {
+		logger.Log.Error("Error verifying comic existence:", err)
+		h.Sender.JSON(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
 
 	var comic model.Comic
-	comic, err = h.Storage.GetComic(ctx, id)
-	if err != nil {
-		h.Sender.JSON(w, http.StatusInternalServerError, err.Error())
-		return
-	}
 
-	if (model.Comic{}) == comic {
-		h.Sender.JSON(w, http.StatusBadRequest, "Book with id="+fmt.Sprint(comic.ID)+" not found")
+	if comicExists {
+		// Fetch the comic from the database
+		comic, err = h.Storage.GetComic(ctx, id)
 		if err != nil {
-			panic(err)
+			logger.Log.Error("Error fetching comic from database:", err)
+			h.Sender.JSON(w, http.StatusInternalServerError, "Internal server error")
+			return
 		}
-		return
+	} else {
+		comic, err = client.FetchComicFromAPI(ctx, id)
+		if err != nil {
+			logger.Log.Error("Error fetching comic from external API:", err)
+			h.Sender.JSON(w, http.StatusBadGateway, "Failed to fetch comic from external service")
+			return
+		}
+
+		comic := &model.UpdateComicRequest{
+			ID:       comic.ID,
+			Title:    comic.Title,
+			CoverURL: comic.CoverURL,
+			Likes:    0,
+		}
+
+		id, err = h.Storage.UpdateComic(ctx, *comic)
+		if err != nil {
+			logger.Log.Error("Error storing new comic in database:", err)
+			h.Sender.JSON(w, http.StatusInternalServerError, "Internal server error")
+			return
+		}
 	}
 
-	bookResponse := model.GetComicResponse{
+	comicResponse := model.GetComicResponse{
 		ID:       comic.ID,
 		Title:    comic.Title,
 		CoverURL: comic.CoverURL,
 		Likes:    comic.Likes,
 	}
 
-	err = h.Sender.JSON(w, http.StatusOK, bookResponse)
+	err = h.Sender.JSON(w, http.StatusOK, comicResponse)
 	if err != nil {
-		logger.OutputLog.WithFields(logrus.Fields{
+		logger.Log.WithFields(logrus.Fields{
 			"err": err.Error(),
-		}).Fatal(fmt.Sprint("Error when requesting /comic/", comic.ID))
-
-		panic(err)
+		}).Fatalf("Error sending response for /comic/%d", comic.ID)
 	}
 }
 
 // UpdateComic godoc
 //
-//		@Summary		Update a specific book
-//		@Tags			Books
-//		@Produce		json
-//	 	@Accept			json
-//		@Param			title body string false "Book title"
-//		@Param			author body string false "Book author"
-//		@Param			coverUrl body string false "Book coverUrl"
-//		@Param			postUrl body string false "Book post url"
-//		@Success		200	{object} model.IDResponse
+//	@Summary		Update a specific comic
+//	@Tags			Comics
+//	@Param			title body string false "Comic title"
+//	@Param			coverUrl body string false "Comic coverUrl"
+//	@Success		200	{object} model.IDResponse
 //
-// @Router			/api/book/update [patch]
+// @Router			/api/comic/update [patch]
 func (h *Handlers) UpdateComicHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	var comic model.UpdateComicRequest
@@ -142,7 +171,7 @@ func (h *Handlers) UpdateComicHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !exists {
-		h.Sender.JSON(w, http.StatusBadRequest, "Book with id="+fmt.Sprint(comic.ID)+" not found")
+		h.Sender.JSON(w, http.StatusBadRequest, "Comic with id="+fmt.Sprint(comic.ID)+" not found")
 		return
 	}
 
