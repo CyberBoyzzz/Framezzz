@@ -1,8 +1,6 @@
 definitions:
-  model.GetBookResponse:
+  model.GetComicResponse:
     properties:
-      author:
-        type: string
       coverUrl:
         type: string
       id:
@@ -22,7 +20,7 @@ info:
   description: Api Endpoints for Go Server
   title: Go Rest Api
 paths:
-  /api/book/{id}:
+  /api/comic/{id}:
     get:
       parameters:
       - description: Book ID
@@ -36,90 +34,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.GetBookResponse'
-      summary: Get a specific book
+            $ref: '#/definitions/model.GetComicResponse'
+      summary: Get a specific comic
       tags:
-      - Books
-  /api/book/add:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Book title
-        in: body
-        name: title
-        required: true
-        schema:
-          type: string
-      - description: Book author
-        in: body
-        name: author
-        required: true
-        schema:
-          type: string
-      - description: Book coverUrl
-        in: body
-        name: coverUrl
-        required: true
-        schema:
-          type: string
-      - description: Book post url
-        in: body
-        name: postUrl
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.IDResponse'
-      summary: Add a specific book
-      tags:
-      - Books
-  /api/book/delete/{id}:
-    delete:
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.GetBookResponse'
-      summary: Delete a specific book
-      tags:
-      - Books
-  /api/book/update:
+      - Comics
+  /api/comic/update:
     patch:
       consumes:
       - application/json
       parameters:
-      - description: Book title
+      - description: Comic title
         in: body
         name: title
-        schema:
-          type: string
-      - description: Book author
-        in: body
-        name: author
         schema:
           type: string
       - description: Book coverUrl
         in: body
         name: coverUrl
-        schema:
-          type: string
-      - description: Book post url
-        in: body
-        name: postUrl
         schema:
           type: string
       produces:
@@ -129,10 +60,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.IDResponse'
-      summary: Update a specific book
+      summary: Update a specific Comic
       tags:
-      - Books
-  /api/books:
+      - Comics
+  /api/comics:
     get:
       produces:
       - application/json
@@ -141,9 +72,9 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.GetBookResponse'
+              $ref: '#/definitions/model.GetComicResponse'
             type: array
-      summary: Get all books
+      summary: Get all comics
       tags:
-      - Books
+      - Comics
 swagger: "2.0"

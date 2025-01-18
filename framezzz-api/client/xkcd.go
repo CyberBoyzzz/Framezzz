@@ -12,7 +12,7 @@ import (
 func FetchComicFromAPI(ctx context.Context, id int) (model.Comic, error) {
 	var comic model.Comic
 
-	apiURL := fmt.Sprintf("https://xkcd.com/%s/info.0.json", id)
+	apiURL := fmt.Sprintf("https://xkcd.com/%v/info.0.json", id)
 
 	response, err := MakeAPICall(http.MethodGet, apiURL)
 	if err != nil {
