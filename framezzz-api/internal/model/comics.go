@@ -14,7 +14,7 @@ type ExternalComicAPIResponse struct {
 	Day        string `json:"day"`
 }
 
-// Comic is the db schema for the books table
+// Comic is the db schema for the comics table
 type Comic struct {
 	ID       int    `json:"num" db:"id"`
 	Title    string `json:"safe_title" db:"safe_title"`

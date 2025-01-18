@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/CyberBoyzzz/Framezzz/client"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -39,7 +40,6 @@ func (h *Handlers) GetComicsHandler(w http.ResponseWriter, r *http.Request) {
 			Title:    comic.Title,
 			CoverURL: comic.CoverURL,
 		})
-
 	}
 
 	err = h.Sender.JSON(w, http.StatusOK, comicResponse)
@@ -143,48 +143,52 @@ func (h *Handlers) GetComicHandler(w http.ResponseWriter, r *http.Request) {
 //	@Param			coverUrl body string false "Comic coverUrl"
 //	@Success		200	{object} model.IDResponse
 //
-// @Router			/api/comic/update [patch]
+// @Router			/api/comic/update/{id} [patch]
 func (h *Handlers) UpdateComicHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	var comic model.UpdateComicRequest
 
-	err := json.NewDecoder(r.Body).Decode(&comic)
-	if err != nil {
-		h.Sender.JSON(w, http.StatusInternalServerError, err.Error())
+	vars := mux.Vars(r)
+	idStr, exists := vars["id"]
+	if !exists {
+		h.Sender.JSON(w, http.StatusBadRequest, map[string]string{"error": "Comic ID is required"})
 		return
 	}
 
-	err = Validate.Struct(comic)
+	comicID, err := strconv.Atoi(idStr)
 	if err != nil {
+		h.Sender.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid comic ID format"})
+		return
+	}
+
+	var updateComicRequest model.UpdateComicRequest
+	if err := json.NewDecoder(r.Body).Decode(&updateComicRequest); err != nil {
+		h.Sender.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid request payload"})
+		return
+	}
+
+	updateComicRequest.ID = comicID
+
+	if err := Validate.Struct(updateComicRequest); err != nil {
 		var errs []string
 		for _, err := range err.(validator.ValidationErrors) {
-			errs = append(errs, err.Field()+" "+err.Tag())
+			errs = append(errs, fmt.Sprintf("%s %s", err.Field(), err.Tag()))
 		}
-		h.Sender.JSON(w, http.StatusBadRequest, strings.Join(errs, ", "))
+		h.Sender.JSON(w, http.StatusBadRequest, map[string]string{"error": strings.Join(errs, ", ")})
 		return
 	}
 
-	exists, err := h.Storage.VerifyComicExists(ctx, comic.ID)
+	id, err := h.Storage.UpdateComic(ctx, updateComicRequest)
 	if err != nil {
-		h.Sender.JSON(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	if !exists {
-		h.Sender.JSON(w, http.StatusBadRequest, "Comic with id="+fmt.Sprint(comic.ID)+" not found")
-		return
-	}
-
-	id, err := h.Storage.UpdateComic(ctx, comic)
-	if err != nil {
-		h.Sender.JSON(w, http.StatusInternalServerError, err.Error())
+		log.Printf("Failed to update comic: %v", err)
+		h.Sender.JSON(w, http.StatusInternalServerError, map[string]string{"error": "Failed to update comic"})
 		return
 	}
 
 	response := model.IDResponse{ID: id}
-	err = h.Sender.JSON(w, http.StatusOK, response)
-	if err != nil {
-		panic(err)
+
+	// Send the response
+	if err := h.Sender.JSON(w, http.StatusOK, response); err != nil {
+		log.Printf("Failed to send response: %v", err)
 	}
 }
 

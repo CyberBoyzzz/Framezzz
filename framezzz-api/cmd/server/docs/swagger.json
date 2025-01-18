@@ -86,7 +86,7 @@
             }
         },
         "/api/comic/update": {
-            "patch": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
