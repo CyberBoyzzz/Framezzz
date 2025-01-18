@@ -15,6 +15,8 @@ Let's looks at some cool comics.
 docker compose up
 ```
 
+Application will be available at `http://localhost:4200/`
+
 ## Swagger?
 
 [Core API](https://github.com/CyberBoyzzz/Framezzz/blob/main/framezzz-api/cmd/server/docs/swagger.yaml)
