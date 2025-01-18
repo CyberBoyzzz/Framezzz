@@ -56,7 +56,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	router.NotFoundHandler = http.HandlerFunc(app.NotFoundHandler)
 	router.Methods("GET").Path("/api/comic").HandlerFunc(app.GetComicsHandler)
 	router.Methods("GET").Path("/api/comic/{id:[0-9]+}").HandlerFunc(app.GetComicHandler)
-	router.Methods("POST").Path("/api/comic/update/").HandlerFunc(app.UpdateComicHandler)
+	router.Methods("POST").Path("/api/comic/update/{id:[0-9]+}").HandlerFunc(app.UpdateComicHandler)
 
 	if app.Env != config.PROD_ENV {
 		router.Methods("GET").PathPrefix("/api/docs/").Handler(httpSwagger.Handler(

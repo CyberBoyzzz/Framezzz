@@ -23,7 +23,7 @@ paths:
   /api/comic/{id}:
     get:
       parameters:
-      - description: Book ID
+      - description: Comic ID
         in: path
         name: id
         required: true
@@ -48,7 +48,7 @@ paths:
         name: title
         schema:
           type: string
-      - description: Book coverUrl
+      - description: Comic coverUrl
         in: body
         name: coverUrl
         schema:
