@@ -5,6 +5,7 @@ import (
 	"github.com/CyberBoyzzz/Framezzz/config"
 	"github.com/CyberBoyzzz/Framezzz/internal/handlers"
 	"github.com/CyberBoyzzz/Framezzz/internal/middlewares"
+	"github.com/CyberBoyzzz/Framezzz/internal/storage"
 	"github.com/CyberBoyzzz/Framezzz/pkg/httputils"
 	"github.com/CyberBoyzzz/Framezzz/pkg/logger"
 	"net/http"
@@ -38,18 +39,17 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		}),
 	}
 
-	// can change DB implementation from here
-	//newStorage, err := storage.NewPostgresDB()
-	//if err != nil {
-	//	logger.Log.Error(err)
-	//	panic(err.Error())
-	//}
-	//// Migrations which will update the DB or create it if it doesn't exist.
-	//if err := newStorage.MigratePostgres(
-	//	"file://migrations"); err != nil {
-	//	logger.Log.Fatal(err)
-	//}
-	//app.Storage = newStorage
+	newStorage, err := storage.NewPostgresDB()
+	if err != nil {
+		logger.Log.Error(err)
+		panic(err.Error())
+	}
+	// Migrations which will update the DB or create it if it doesn't exist.
+	if err := newStorage.MigratePostgres(
+		"file://migrations"); err != nil {
+		logger.Log.Fatal(err)
+	}
+	app.Storage = newStorage
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.MethodNotAllowedHandler = http.HandlerFunc(app.NotAllowedHandler)
@@ -57,8 +57,6 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	router.Methods("GET").Path("/api/comic").HandlerFunc(app.GetComicsHandler)
 	router.Methods("GET").Path("/api/comic/{id:[0-9]+}").HandlerFunc(app.GetComicHandler)
 	router.Methods("POST").Path("/api/comic/update/").HandlerFunc(app.UpdateComicHandler)
-	//router.Methods("POST").Path("/api/auth/login").HandlerFunc(app.)
-	//router.Methods("POST").Path("/api/auth/register").HandlerFunc(app)
 
 	if app.Env != config.PROD_ENV {
 		router.Methods("GET").PathPrefix("/api/docs/").Handler(httpSwagger.Handler(
@@ -95,7 +93,7 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 	n.UseHandler(wrappedRouter)
 
 	startupMessage := "Starting API server (v" + app.Version + ")"
-	startupMessage = startupMessage + " on port dupa" + app.Port
+	startupMessage = startupMessage + " on port" + app.Port
 	startupMessage = startupMessage + " in " + app.Env + " mode."
 	logger.Log.Info(startupMessage)
 
@@ -112,12 +110,9 @@ func (app *AppServer) Run(appConfig config.ApiEnvConfig) {
 		Handler:      n,
 	}
 
-	logger.Log.Info("dupa...")
+	logger.Log.Info("Loading...")
 
-	err := server.ListenAndServe()
-	if err != nil {
-		return
-	}
+	server.ListenAndServe()
 }
 
 // OnShutdown is called when the server has a panic.
