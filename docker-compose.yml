@@ -1,9 +1,9 @@
-version: "3.9"
-
 services:
   api:
     container_name: api
-    build: .
+    build:
+      context: .
+      dockerfile: framezzz-api/Dockerfile
     image: api:go
     env_file:
       - .env
@@ -13,9 +13,19 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: ${DB_HOST}
     ports:
-      - "7312:7312"
+      - '7312:7312'
     depends_on:
       - postgres
+
+  frontend:
+    build:
+      context: .
+      dockerfile: framezzz-frontend/Dockerfile
+    ports:
+      - '4200:4200'
+    environment:
+      - NODE_ENV=development
+
   postgres:
     container_name: postgres
     image: postgres:16-alpine
@@ -26,7 +36,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
 
