@@ -12,14 +12,14 @@ export class AuthService {
   private readonly httpClient = inject(HttpClient);
 
   public registerUser(user: UserData): Observable<RegisterResponse> {
-    return this.httpClient.post<RegisterResponse>(`/api/auth/register`, {
+    return this.httpClient.post<RegisterResponse>(`/auth-api/auth/register`, {
       email: user.email,
       password: user.password,
     });
   }
 
   public loginUser(user: UserData): Observable<LoginResponse> {
-    return this.httpClient.post<LoginResponse>(`/api/auth/login`, {
+    return this.httpClient.post<LoginResponse>(`/auth-api/auth/login`, {
       email: user.email,
       password: user.password,
     });

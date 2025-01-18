@@ -26,6 +26,24 @@ services:
     environment:
       - NODE_ENV=development
 
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: framezzz-auth/Dockerfile
+    image: auth:go
+    env_file:
+      - .env
+    environment:
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+    ports:
+      - '7313:7313'
+    depends_on:
+      - postgres
+
   postgres:
     container_name: postgres
     image: postgres:16-alpine
